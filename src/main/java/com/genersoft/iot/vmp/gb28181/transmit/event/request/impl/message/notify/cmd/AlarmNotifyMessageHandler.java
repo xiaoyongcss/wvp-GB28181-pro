@@ -7,7 +7,6 @@ import com.genersoft.iot.vmp.gb28181.event.EventPublisher;
 import com.genersoft.iot.vmp.gb28181.transmit.event.request.SIPRequestProcessorParent;
 import com.genersoft.iot.vmp.gb28181.transmit.event.request.impl.message.IMessageHandler;
 import com.genersoft.iot.vmp.gb28181.transmit.event.request.impl.message.notify.NotifyMessageHandler;
-import com.genersoft.iot.vmp.gb28181.utils.Coordtransform;
 import com.genersoft.iot.vmp.gb28181.utils.NumericUtil;
 import com.genersoft.iot.vmp.gb28181.utils.XmlUtil;
 import com.genersoft.iot.vmp.service.IDeviceAlarmService;
@@ -27,10 +26,9 @@ import javax.sip.InvalidArgumentException;
 import javax.sip.RequestEvent;
 import javax.sip.SipException;
 import javax.sip.message.Response;
-
 import java.text.ParseException;
 
-import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.*;
+import static com.genersoft.iot.vmp.gb28181.utils.XmlUtil.getText;
 
 @Component
 public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent implements InitializingBean, IMessageHandler {
@@ -115,7 +113,7 @@ public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent impleme
         }
 
         if (!StringUtils.isEmpty(deviceAlarm.getAlarmMethod())) {
-            if ( deviceAlarm.getAlarmMethod().contains(DeviceAlarmMethod.GPS.getVal() + "")) {
+            if (deviceAlarm.getAlarmMethod().contains(DeviceAlarmMethod.GPS.getVal() + "")) {
                 MobilePosition mobilePosition = new MobilePosition();
                 mobilePosition.setCreateTime(DateUtil.getNow());
                 mobilePosition.setDeviceId(deviceAlarm.getDeviceId());
@@ -147,9 +145,7 @@ public class AlarmNotifyMessageHandler extends SIPRequestProcessorParent impleme
             }
         }
         if (!StringUtils.isEmpty(deviceAlarm.getDeviceId())) {
-            if (deviceAlarm.getAlarmMethod().contains(DeviceAlarmMethod.Video.getVal() + "")) {
-                deviceAlarm.setAlarmType(getText(rootElement.element("Info"), "AlarmType"));
-            }
+            deviceAlarm.setAlarmType(getText(rootElement.element("Info"), "AlarmType"));
         }
 
         if (channelId.equals(sipConfig.getId())) {
